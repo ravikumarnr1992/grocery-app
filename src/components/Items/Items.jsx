@@ -14,13 +14,11 @@ const Items = () => {
       const data = await axios.get(
         "https://backend-api-2qaj.onrender.com/products/users/list"
       );
-      if(data){
+      if (data) {
         setIsLoding(false);
         setItems(data.data.response_data);
       }
-      
     };
-  
 
     fetchItems();
     // setIsLoding(false);
@@ -35,7 +33,7 @@ const Items = () => {
           {isLoading && <Spinner />}
           <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
             {items?.map((product) => (
-              <Item product={product} key={product.id} />
+              <Item product={product} key={product._id} />
             ))}
           </div>
           {/* {filteredItems.length < 1 && <Message />} */}

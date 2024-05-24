@@ -1,25 +1,42 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { useSignup } from "../../hooks/useSignup";
+import { Link, useNavigate } from "react-router-dom";
+import { useSignup } from "../../hooks/useUser";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const { signup, isPending } = useSignup();
   const { register, formState, getValues, handleSubmit, reset } = useForm();
   const { errors } = formState;
 
+  const navigate = useNavigate();
+
   function handleUserForm({ fullName, email, password }) {
     signup(
       { fullName, email, password },
       {
-        onSettled: () => reset(),
+        onSuccess: (data) => {
+          if (data.response_code === 400) {
+            toast.success("User is already registered!");
+          } else {
+            toast.success("User successfully registered!");
+            navigate.navigate("/login");
+          }
+        },
+      },
+      {
+        onError: () => {
+          toast.error("Error occured while registering user..");
+        },
       }
     );
   }
 
   // Function to handle form submission
+
   const onSubmitForm = (data) => {
     handleUserForm(data); // Handle form submission
+    reset();
   };
 
   return (
