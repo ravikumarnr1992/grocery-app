@@ -21,8 +21,11 @@ export async function signinUser({ email, password }) {
       password,
     }
   );
-  console.log(data);
-  localStorage.setItem("token", data.token);
+  localStorage.setItem("authDetails", JSON.stringify(data));
   if (error) throw new Error(error.message);
   return data;
+}
+
+export async function signoutUser() {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 }

@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useSignin } from "../../hooks/useUser";
 import toast from "react-hot-toast";
+import Spinner from "../../UI/Spinner";
 
 const Login = () => {
   const { signin, isPending } = useSignin();
@@ -11,12 +12,17 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  if (isPending) return <Spinner />;
+
   function handleUserForm({ email, password }) {
     signin(
       { email, password },
       {
         onSuccess: (data) => {
-          if (data.token) {
+          if (data.role === "ADMIN") {
+            navigate("/app/dashboard");
+            toast.success("Admin successfully Loggedin!");
+          } else if (data.role === "USER") {
             toast.success("User successfully Loggedin!");
             navigate("/");
           } else {
